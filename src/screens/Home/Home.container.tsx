@@ -25,9 +25,14 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
       clearTimeout(handler);
     };
   }, [query]);
-  const {getDataOnMount, getMoreData} = useFetchPaginated<Movies>(
-    async page => await fetchData(page),
-  );
+  const {
+    getDataOnMount,
+    getMoreData,
+    isLoading,
+    data,
+    isLoadingMore,
+    isRefreshing,
+  } = useFetchPaginated<Movies>(async page => await fetchData(page));
   const fetchData = async (page: number) => {
     const reponse = await fetch(
       `${BASE_URL}?page=${page}?&apikey=26844980&s=${
@@ -48,7 +53,16 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
   useEffect(() => {
     getDataOnMount();
   }, []);
-  return <Home />;
+  return (
+    <Home
+      isLoading={isLoading}
+      isLoadingMore={isLoadingMore}
+      data={data}
+      isRefreshing={isRefreshing}
+      getDataOnMount={getDataOnMount}
+      getMoreData={getMoreData}
+    />
+  );
 };
 
 export default HomeContainer;
