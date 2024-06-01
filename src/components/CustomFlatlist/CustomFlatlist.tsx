@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import EmptyList from '../EmptyList/EmptyList';
+import customFlatlistStyles from './customFlatlistStyles';
 
 interface CustomFlatListProps<T = any> extends FlatListProps<T> {
   data: T[];
@@ -50,7 +51,7 @@ const CustomFlatlist = <T,>({
   const renderFlatlist = useMemo(() => {
     if (failedError) {
       return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={customFlatlistStyles.emptyContainer}>
           <Text>{failedError}</Text>
           <TouchableOpacity onPress={getDataOnMount}>
             <Text> try again</Text>

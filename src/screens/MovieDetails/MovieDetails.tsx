@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {UseFetchReturnType} from '../../hooks/useFetch';
 import {MovieDetail} from '../../utils/types';
+import movieDetailsStyles from './movieDetailsStyles';
 
 /**
  * Represents Movie detail screen ui
@@ -30,13 +31,13 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({
 }): JSX.Element => {
   if (isLoading) {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={movieDetailsStyles.center}>
         <ActivityIndicator />
       </View>
     );
   }
   if (failedError) {
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={movieDetailsStyles.center}>
       <Text>{failedError}</Text>
       <TouchableOpacity onPress={apiCall}>
         <Text> try again</Text>
@@ -46,47 +47,22 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({
   if (data) {
     return (
       <ScrollView>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 20,
-            paddingHorizontal: 16,
-            gap: 20,
-          }}>
+        <View style={movieDetailsStyles.container}>
           <Text> {data.Title} </Text>
-          <Image
-            source={{uri: data.Poster}}
-            style={{width: 100, height: 100}}
-          />
+          <Image source={{uri: data.Poster}} style={movieDetailsStyles.image} />
           <Text>{data.Plot}</Text>
-          <View style={{flexDirection: 'row', gap: 5}}>
+          <View style={movieDetailsStyles.rating}>
             {data.Ratings.map(item => (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 5,
-                  borderWidth: 0.5,
-                  padding: 5,
-                }}>
+              <View style={movieDetailsStyles.ratingCard}>
                 <Text numberOfLines={1}>{item.Source}</Text>
                 <Text>{item.Value}</Text>
               </View>
             ))}
           </View>
-          <View style={{flex: 1, gap: 10}}>
-            <Text style={{fontSize: 20}}>Actors</Text>
+          <View style={movieDetailsStyles.actorsSection}>
+            <Text style={movieDetailsStyles.title}>Actors</Text>
             {data.Actors.split(',').map(item => (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 5,
-                  borderWidth: 0.5,
-                  padding: 5,
-                }}>
+              <View style={movieDetailsStyles.actors}>
                 <Text>{item}</Text>
               </View>
             ))}

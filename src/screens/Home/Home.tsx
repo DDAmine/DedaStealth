@@ -5,6 +5,7 @@ import {Movies} from '../../utils/types';
 import {UseFetchPaginatedReturnType} from '../../hooks/useFetchPaginated';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import MovieCard from '../../components/MovieCard/MovieCard';
+import homeStyles from './homeStyles';
 
 /**
  * Represents Home screen ui
@@ -38,14 +39,7 @@ const Home: React.FC<HomeProps> = ({
   checkDetails,
 }): JSX.Element => {
   return (
-    <View
-      style={{
-        flex: 1,
-        paddingHorizontal: 16,
-        paddingTop: 20,
-        backgroundColor: 'white',
-        gap: 10,
-      }}>
+    <View style={homeStyles.container}>
       <CustomInput text={query} onChangeText={setQuery} />
       <CustomFlatlist<Movies>
         getDataOnMount={getDataOnMount}
