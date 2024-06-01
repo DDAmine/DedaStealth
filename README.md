@@ -1,5 +1,6 @@
-This i![simulator_screenshot_29661468-C4B6-44CC-9F15-572A69B6A099](https://github.com/DDAmine/DedaStealth/assets/40935974/757776e4-b962-422d-ac73-9c201f6074f2)
-s a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+DedaStealth movie app 
+![simulator_screenshot_29661468-C4B6-44CC-9F15-572A69B6A099](https://github.com/DDAmine/DedaStealth/assets/40935974/757776e4-b962-422d-ac73-9c201f6074f2)
+
 
 # Getting Started
 
