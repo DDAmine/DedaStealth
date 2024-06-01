@@ -52,7 +52,7 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
   };
   useEffect(() => {
     getDataOnMount();
-  }, []);
+  }, [debouncedQuery]);
   return (
     <Home
       isLoading={isLoading}
@@ -61,6 +61,8 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
       isRefreshing={isRefreshing}
       getDataOnMount={getDataOnMount}
       getMoreData={getMoreData}
+      query={query}
+      setQuery={setQuery}
     />
   );
 };

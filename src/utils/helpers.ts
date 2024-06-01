@@ -1,11 +1,3 @@
-const fetchFunction = async (page, query) => {
-  const response = await fetch(
-    `https://api.example.com/data?page=${page}&query=${query}`,
-  );
-  const result = await response.json();
-  return result.data; // Adjust this based on the actual structure of your API response
-};
-
 const isNetworkError = (error: any): boolean => {
   return (
     'error' in error &&
