@@ -38,19 +38,20 @@ const MovieDetailsContainer: React.FC<MovieDetailsContainerProps> = ({
     console.log(res);
     return res;
   };
-  const {
-    apiCall,
-    data,
-    isLoading,
-    refreshApiCall,
-    isRefreshing,
-    failedError,
-    setData,
-  } = useFetch<MovieDetail>(async () => await fetchData());
+  const {apiCall, data, isLoading, refreshApiCall, isRefreshing, failedError} =
+    useFetch<MovieDetail>(async () => await fetchData());
   useEffect(() => {
     void apiCall();
   }, []);
-  return <MovieDetails />;
+  return (
+    <MovieDetails
+      apiCall={apiCall}
+      isLoading={isLoading}
+      data={data}
+      isRefreshing={isRefreshing}
+      refreshApiCall={refreshApiCall}
+    />
+  );
 };
 
 export default MovieDetailsContainer;
