@@ -7,7 +7,10 @@ import MovieDetailsContainer from '../../screens/MovieDetails/MovieDetails.conta
 
 export type MovieStackParamList = {
   [HOME]: undefined;
-  [MOVIE_DETAIL_SCREEN]: undefined;
+  [MOVIE_DETAIL_SCREEN]: {
+    name: string;
+    id: string;
+  };
 };
 
 const MoviesStack = createNativeStackNavigator<MovieStackParamList>();
@@ -18,8 +21,13 @@ const MoviesStack = createNativeStackNavigator<MovieStackParamList>();
 const MoviesStackNavigation = (): JSX.Element => {
   return (
     <MoviesStack.Navigator>
-      <MoviesStack.Screen name={HOME} component={HomeContainer} />
       <MoviesStack.Screen
+        name={HOME}
+        component={HomeContainer}
+        options={{title: 'Home'}}
+      />
+      <MoviesStack.Screen
+        options={({route}) => ({title: route.params.name})}
         name={MOVIE_DETAIL_SCREEN}
         component={MovieDetailsContainer}
       />

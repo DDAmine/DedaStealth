@@ -59,9 +59,7 @@ const useFetchPaginated = <T>(
 
   // Data, errors and loaders states
   const [data, setData] = useState<T[]>(initialData ?? []);
-  const [resultsCount, setResultsCount] = useState<number | null>(
-    initialResultsCount ?? null,
-  );
+  const [resultsCount, setResultsCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(DEFAULT_PAGE_NUMBER);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -87,6 +85,7 @@ const useFetchPaginated = <T>(
       const res = await fetchDataCallback(DEFAULT_PAGE_NUMBER);
       setData(res.Search);
       setCurrentPage(DEFAULT_PAGE_NUMBER);
+      console.log(res.totalResults);
       setResultsCount(res.totalResults);
     } catch (err: any) {
       setData([]);
@@ -100,21 +99,23 @@ const useFetchPaginated = <T>(
    * Function called when the user scrolls to the bottom of the list to get next data
    */
   const getMoreData = async (): Promise<void> => {
-    try {
-      setIsLoadingMore(true);
-      if (loadingMoreError !== undefined) {
-        setLoadingMoreError(undefined);
+    if (resultsCount > data.length) {
+      try {
+        setIsLoadingMore(true);
+        if (loadingMoreError !== undefined) {
+          setLoadingMoreError(undefined);
+        }
+        // Fetch next page
+        const res = await fetchDataCallback(currentPage + 1);
+        setCurrentPage(currentPage + 1);
+        // Concat new fetched data to data state
+        setData([...data, ...res.Search]);
+        setResultsCount(res.totalResults);
+      } catch (err: any) {
+        setLoadingMoreError(handleError(err));
+      } finally {
+        setIsLoadingMore(false);
       }
-      // Fetch next page
-      const res = await fetchDataCallback(currentPage + 1);
-      setCurrentPage(currentPage + 1);
-      // Concat new fetched data to data state
-      setData([...data, ...res.Search]);
-      setResultsCount(res.totalResults);
-    } catch (err: any) {
-      setLoadingMoreError(handleError(err));
-    } finally {
-      setIsLoadingMore(false);
     }
   };
 

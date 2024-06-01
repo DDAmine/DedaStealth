@@ -1,6 +1,6 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useEffect, useState} from 'react';
-import {HOME} from '../../utils/screenNames';
+import {HOME, MOVIE_DETAIL_SCREEN} from '../../utils/screenNames';
 import {MovieStackParamList} from '../../navigation /MoviesStack/MoviesStackNavigation';
 import Home from './Home';
 import {BASE_URL} from '../../utils/endpoints';
@@ -13,7 +13,9 @@ import {Movies, PaginatedApplication} from '../../utils/types';
  */
 interface HomeContainerProps
   extends NativeStackScreenProps<MovieStackParamList, typeof HOME> {}
-const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
+const HomeContainer: React.FC<HomeContainerProps> = ({
+  navigation,
+}): JSX.Element => {
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   useEffect(() => {
@@ -25,9 +27,17 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
       clearTimeout(handler);
     };
   }, [query]);
+  const checkDetails = (id: string, name: string) => {
+    navigation.navigate(MOVIE_DETAIL_SCREEN, {
+      id,
+      name,
+    });
+  };
   const {
     getDataOnMount,
     getMoreData,
+    loadingMoreError,
+    failedError,
     isLoading,
     data,
     isLoadingMore,
@@ -35,7 +45,7 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
   } = useFetchPaginated<Movies>(async page => await fetchData(page));
   const fetchData = async (page: number) => {
     const reponse = await fetch(
-      `${BASE_URL}?page=${page}?&apikey=26844980&s=${
+      `${BASE_URL}?page=${page}&apikey=26844980&s=${
         debouncedQuery.length > 1 ? debouncedQuery : 'happy'
       }`,
       {
@@ -47,7 +57,7 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
       },
     );
     const res: PaginatedApplication<Movies> = await reponse.json();
-    console.log(res);
+
     return res;
   };
   useEffect(() => {
@@ -63,6 +73,9 @@ const HomeContainer: React.FC<HomeContainerProps> = (): JSX.Element => {
       getMoreData={getMoreData}
       query={query}
       setQuery={setQuery}
+      checkDetails={checkDetails}
+      failedError={failedError}
+      loadingMoreError={loadingMoreError}
     />
   );
 };

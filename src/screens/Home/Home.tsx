@@ -1,9 +1,10 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import CustomFlatlist from '../../components/CustomFlatlist/CustomFlatlist';
 import {Movies} from '../../utils/types';
 import {UseFetchPaginatedReturnType} from '../../hooks/useFetchPaginated';
 import CustomInput from '../../components/CustomInput/CustomInput';
+import MovieCard from '../../components/MovieCard/MovieCard';
 
 /**
  * Represents Home screen ui
@@ -13,10 +14,16 @@ import CustomInput from '../../components/CustomInput/CustomInput';
 interface HomeProps
   extends Omit<
     UseFetchPaginatedReturnType<Movies>,
-    'currentPage' | 'setCurrentPage' | 'setResultsCount' | 'setData'
+    | 'currentPage'
+    | 'setCurrentPage'
+    | 'setResultsCount'
+    | 'resultsCount'
+    | 'refreshError'
+    | 'getRefreshedData'
   > {
   query: string;
   setQuery: (query: string) => void;
+  checkDetails: (id: string, name: string) => void;
 }
 const Home: React.FC<HomeProps> = ({
   data,
@@ -24,9 +31,11 @@ const Home: React.FC<HomeProps> = ({
   isLoading,
   isLoadingMore,
   getDataOnMount,
+  loadingMoreError,
   getMoreData,
   query,
   setQuery,
+  checkDetails,
 }): JSX.Element => {
   return (
     <View
@@ -35,20 +44,21 @@ const Home: React.FC<HomeProps> = ({
         paddingHorizontal: 16,
         paddingTop: 20,
         backgroundColor: 'white',
+        gap: 10,
       }}>
       <CustomInput text={query} onChangeText={setQuery} />
       <CustomFlatlist<Movies>
         getDataOnMount={getDataOnMount}
+        columnWrapperStyle={{gap: 10}}
+        contentContainerStyle={{gap: 10}}
         isLoading={isLoading}
         data={data}
+        failedError={failedError}
+        loadingMoreError={loadingMoreError}
         getMoreData={getMoreData}
         isLoadingMore={isLoadingMore}
         renderItem={({item, index}) => {
-          return (
-            <Text style={{height: 100}} key={index}>
-              {item.Title}
-            </Text>
-          );
+          return <MovieCard seeDetails={checkDetails} movie={item} />;
         }}
       />
     </View>
